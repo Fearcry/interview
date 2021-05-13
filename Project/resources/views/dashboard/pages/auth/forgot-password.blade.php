@@ -8,14 +8,6 @@
                         <div><strong>Success</strong></div>
                         <div>{{ session()->get('success') }} </div>
                     </div>
-                    @push('scripts')
-                        <script>
-                            setTimeout(function() {
-                                window.location = '{{ route('dashboard') }}'
-                            }, 1500);
-
-                        </script>
-                    @endpush
                 </div>
             </div>
 
@@ -26,24 +18,18 @@
                     <div> {{ $message }}</div>
                 </div>
             @enderror
-            <form action="{{ route('post-dashboard.login') }}" method="POST">
+            <form action="{{ route('post-dashboard.forgot') }}" method="POST">
                 @csrf
-                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+                <h1 class="h3 mb-3 fw-normal">Forgot Password</h1>
 
                 <div class="form-floating">
                     <label for="floatingInput">Email address</label>
                     <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com">
                 </div>
-                <div class="form-floating">
-                    <label for="floatingPassword">Password</label>
-                    <input type="password" name="password" class="form-control" id="floatingPassword"
-                        placeholder="Password">
-                </div>
 
+                <div><a name="" class="btn btn-link ml-0 pl-0" href="{{ route('dashboard.login') }}" role="button">Sign in</a></div>
 
-                <div><a name="" class="btn btn-link ml-0 pl-0" href="{{ route('dashboard.forgot') }}" role="button">Forgot Password?</a></div>
-
-                <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Sign in</button>
+                <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Send</button>
 
             </form>
         @endif

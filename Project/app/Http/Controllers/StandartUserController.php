@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class StandartUserController extends Controller
 {
+    protected $redirectTo = '/';
     public function login(Request $req, UserServices $userServices)
     {
         $validator = Validator::make($req->all(), [
@@ -138,7 +139,9 @@ class StandartUserController extends Controller
     public function verify($token, UserServices $userServices)
     {
         try {
-            $userServices->verify($token);
+            if (!session()->has('success')) {
+                $userServices->verify($token);
+            }
             return view('frontend.pages.auth.verify', [
                 'success' => '
                 Your membership has been activated.
@@ -146,6 +149,20 @@ class StandartUserController extends Controller
             ]);
         } catch (\Exception $ex) {
             return view('frontend.pages.auth.verify', ['error' => $ex->getMessage()]);
+        }
+    }
+    public function resendVerify(UserServices $userServices)
+    {
+        try {
+            $userServices->resendVerifyCode();
+            return back()
+                ->with(
+                    'success',
+                    'The activation code has been sent again. Please check your inbox.'
+                );
+        } catch (\Exception $ex) {
+            return back()
+                ->withErrors(['error' => $ex->getMessage()]);
         }
     }
 }

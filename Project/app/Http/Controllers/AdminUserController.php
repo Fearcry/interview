@@ -22,6 +22,19 @@ class AdminUserController extends Controller
     {
         return view('dashboard.pages.auth.forgot-password');
     }
+    public function  resetPasswordIndex($token, AdminUserServices $adminServices)
+    {
+        try {
+            if (!session()->has('success')) {
+
+                $adminServices->forgotExpiryCheck($token);
+            }
+            return view('dashboard.pages.auth.reset-password', ['token' => $token]);
+        } catch (\Exception $ex) {
+            return view('dashboard.pages.auth.reset-password', ['token' => $token])->withErrors(['expired' => $ex->getMessage()]);
+        }
+    }
+
     public function standartCreateIndex()
     {
         return view('dashboard.pages.users.create', ['admin' => false]);
@@ -92,10 +105,37 @@ class AdminUserController extends Controller
 
         try {
             $adminServices->forgotPassword($req);
+            return back()
+                ->with(
+                    'success',
+                    'Password change request has been sent. Please check your inbox.'
+                );
         } catch (\Exception $ex) {
             return back()
                 ->withErrors(['error' => $ex->getMessage()])
                 ->withInput($req->all());
+        }
+    }
+    public function resetPassword(Request $req, AdminUserServices $adminServices)
+    {
+        $validator = Validator::make($req->all(), [
+            'password' => 'required|confirmed|min:6',
+        ]);
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput($req->all());
+        }
+        try {
+            $adminServices->forgotPasswordChange($req);
+            return back()
+                ->with(
+                    'success',
+                    'Your password has been changed successfully. You can login.'
+                );
+        } catch (\Exception $ex) {
+            toastr()->Error($ex->getMessage(), 'Error');
+            return back();
         }
     }
 

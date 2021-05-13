@@ -19,26 +19,31 @@ use Illuminate\Support\Facades\Route;
 */
 /* Pages */
 
-Route::get('/', [frontendController::class, 'index'])->name('home');
-
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['checkVerify'])->group(function () {
+    Route::get('/', [frontendController::class, 'index'])->name('home');
+});
+Route::get('/unverified', [frontendController::class, 'unverified'])->name('unverified');
+Route::middleware(['auth.standart', 'checkVerify'])->group(function () {
     Route::get('/page/{page}', [frontendController::class, 'index'])->name('home-task-paged');
     Route::get('/task/delete/{id}', [taskController::class, 'delete'])->name('get-task-delete');
     Route::post('/password/change', [StandartUserController::class, 'changePassword'])->name('post-change-password');
     Route::post('/task', [taskController::class, 'create'])->name('post-task');
+    Route::get('/logout', [StandartUserController::class, 'logout'])->name('logout');
 });
-Route::get('/login', [frontendController::class, 'login'])->name('login');
-Route::get('/register', [frontendController::class, 'register'])->name('register');
-Route::get('/forgot-password', [frontendController::class, 'forgot'])->name('forgot');
-Route::get('/reset-password/{token}', [frontendController::class, 'resetPassword'])->name('reset-password');
-Route::get('/logout', [StandartUserController::class, 'logout'])->name('logout');
-Route::get('/verify/{token}', [StandartUserController::class, 'verify'])->name('verify');
+Route::middleware(['auth.guest'])->group(function () {
+    Route::get('/login', [frontendController::class, 'login'])->name('login');
+    Route::get('/register', [frontendController::class, 'register'])->name('register');
+    Route::get('/forgot-password', [frontendController::class, 'forgot'])->name('forgot');
+    Route::get('/reset-password/{token}', [frontendController::class, 'resetPassword'])->name('reset-password');
 
-/* Posts */
-Route::post('/register', [StandartUserController::class, 'create'])->name('post-register');
-Route::post('/login', [StandartUserController::class, 'login'])->name('post-login');
-Route::post('/forgot-password', [StandartUserController::class, 'forgotPassword'])->name('post-forgot-password');
-Route::post('/reset-password', [StandartUserController::class, 'resetForgotPassword'])->name('post-reset-password');
+    Route::get('/verify/{token}', [StandartUserController::class, 'verify'])->name('verify');
+    Route::post('/verify', [StandartUserController::class, 'resendVerify'])->name('post-unverified');
+    /* Posts */
+    Route::post('/register', [StandartUserController::class, 'create'])->name('post-register');
+    Route::post('/login', [StandartUserController::class, 'login'])->name('post-login');
+    Route::post('/forgot-password', [StandartUserController::class, 'forgotPassword'])->name('post-forgot-password');
+    Route::post('/reset-password', [StandartUserController::class, 'resetForgotPassword'])->name('post-reset-password');
+});
 
 
 
@@ -48,8 +53,10 @@ Route::post('/reset-password', [StandartUserController::class, 'resetForgotPassw
 Route::prefix('dashboard')->group(function () {
 
     Route::get('/login', [AdminUserController::class, 'loginIndex'])->name('dashboard.login');
+    Route::get('/forgot-password', [AdminUserController::class, 'forgotIndex'])->name('dashboard.forgot');
+    Route::get('/reset-password/{token}', [AdminUserController::class, 'resetPasswordIndex'])->name('dashboard.reset-password');
     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/', [AdminUserController::class, 'index'])->name('dashboard');
+        Route::get('/', [dashboardController::class, 'index'])->name('dashboard');
         Route::get('/logout', [AdminUserController::class, 'logout'])->name('dashboard.logout');
         Route::prefix('users')->group(function () {
             Route::get('/', [AdminUserController::class, 'index'])->name('dashboard.users');
@@ -73,5 +80,6 @@ Route::prefix('dashboard')->group(function () {
     });
 
     Route::post('/login', [AdminUserController::class, 'login'])->name('post-dashboard.login');
-
+    Route::post('/forgot-password', [AdminUserController::class, 'forgotPassword'])->name('post-dashboard.forgot');
+    Route::post('/reset-password', [AdminUserController::class, 'resetPassword'])->name('post-dashboard.reset-password');
 });

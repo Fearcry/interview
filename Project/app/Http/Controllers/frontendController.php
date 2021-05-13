@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Services\TaskServices;
 use App\Services\UserServices;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Validator;
 
 class frontendController extends Controller
 {
+    use AuthenticatesUsers;
+
+    protected $redirectTo = '/';
+
     public function index(UserServices $userServices, TaskServices $tasks, $page = 1)
     {
         if (Auth::check()) {
@@ -44,13 +49,19 @@ class frontendController extends Controller
     {
         return view('frontend.pages.auth.forgot-password');
     }
-    public function resetPassword($token)
+    public function resetPassword($token, UserServices $userServices)
     {
-        return view('frontend.pages.auth.reset-password', ['token' => $token]);
+        try {
+            if (!session()->has('success')) {
+                $userServices->forgotExpiryCheck($token);
+            }
+            return view('frontend.pages.auth.reset-password', ['token' => $token]);
+        } catch (\Exception $ex) {
+            return view('frontend.pages.auth.reset-password', ['token' => $token])->withErrors(['expired' => $ex->getMessage()]);
+        }
     }
-
-
-
-
-
+    public function unverified()
+    {
+        return view('frontend.pages.auth.unverified');
+    }
 }
