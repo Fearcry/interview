@@ -1,0 +1,11 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/js/dashboard/dashboard.js": "/js/dashboard/dashboard.js",
+    "/css/dashboard/dashboard.css": "/css/dashboard/dashboard.css",
+    "/css/app.css": "/css/app.css",
+    "/js/dashboard/jquery.dataTables.min.js": "/js/dashboard/jquery.dataTables.min.js",
+    "/js/dashboard/dataTables.bootstrap5.min.js": "/js/dashboard/dataTables.bootstrap5.min.js",
+    "/js/dashboard/responsive.bootstrap4.min.js": "/js/dashboard/responsive.bootstrap4.min.js",
+    "/css/dashboard/dataTables.bootstrap5.min.css": "/css/dashboard/dataTables.bootstrap5.min.css",
+    "/css/dashboard/responsive.bootstrap.min.css": "/css/dashboard/responsive.bootstrap.min.css"
+}
