@@ -1,6 +1,6 @@
 ## Kurulum
  sail npm i <br>
- sail artisan migrate:fresh --seed <br>
+ sail artisan migrate --seed <br>
  sail up <br>
  
  Dashboard Kullanıcı Bilgileri <br>
