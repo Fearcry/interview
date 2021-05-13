@@ -3,7 +3,7 @@
  sail artisan migrate:fresh --seed <br>
  sail up <br>
  
- Dashboard Kullanıcı Bilgileri
+ Dashboard Kullanıcı Bilgileri <br>
  email: example@example.com <br>
  password: secret
  
