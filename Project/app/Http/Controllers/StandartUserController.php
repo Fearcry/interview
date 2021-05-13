@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class StandartUserController extends Controller
 {
-    protected $redirectTo = '/';
+
     public function login(Request $req, UserServices $userServices)
     {
         $validator = Validator::make($req->all(), [

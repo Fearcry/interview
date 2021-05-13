@@ -6,17 +6,12 @@ namespace App\Http\Controllers;
 use App\Services\TaskServices;
 use App\Services\UserServices;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
 
-class frontendController extends Controller
+class FrontendController extends Controller
 {
-    use AuthenticatesUsers;
 
-    protected $redirectTo = '/';
 
     public function index(UserServices $userServices, TaskServices $tasks, $page = 1)
     {

@@ -6,7 +6,7 @@ use App\Services\TaskServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class taskController extends Controller
+class TaskController extends Controller
 {
     public function create(Request $req, TaskServices $tasks)
     {

@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\dashboardController;
-use App\Http\Controllers\frontendController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\StandartUserController;
-use App\Http\Controllers\taskController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,21 +22,21 @@ use Illuminate\Support\Facades\Route;
 /* Pages */
 
 Route::middleware(['checkVerify'])->group(function () {
-    Route::get('/', [frontendController::class, 'index'])->name('home');
+    Route::get('/', [FrontendController::class, 'index'])->name('home');
 });
-Route::get('/unverified', [frontendController::class, 'unverified'])->name('unverified');
+Route::get('/unverified', [FrontendController::class, 'unverified'])->name('unverified');
 Route::middleware(['auth.standart', 'checkVerify'])->group(function () {
-    Route::get('/page/{page}', [frontendController::class, 'index'])->name('home-task-paged');
-    Route::get('/task/delete/{id}', [taskController::class, 'delete'])->name('get-task-delete');
+    Route::get('/page/{page}', [FrontendController::class, 'index'])->name('home-task-paged');
+    Route::get('/task/delete/{id}', [TaskController::class, 'delete'])->name('get-task-delete');
     Route::post('/password/change', [StandartUserController::class, 'changePassword'])->name('post-change-password');
-    Route::post('/task', [taskController::class, 'create'])->name('post-task');
+    Route::post('/task', [TaskController::class, 'create'])->name('post-task');
     Route::get('/logout', [StandartUserController::class, 'logout'])->name('logout');
 });
 Route::middleware(['auth.guest'])->group(function () {
-    Route::get('/login', [frontendController::class, 'login'])->name('login');
-    Route::get('/register', [frontendController::class, 'register'])->name('register');
-    Route::get('/forgot-password', [frontendController::class, 'forgot'])->name('forgot');
-    Route::get('/reset-password/{token}', [frontendController::class, 'resetPassword'])->name('reset-password');
+    Route::get('/login', [FrontendController::class, 'login'])->name('login');
+    Route::get('/register', [FrontendController::class, 'register'])->name('register');
+    Route::get('/forgot-password', [FrontendController::class, 'forgot'])->name('forgot');
+    Route::get('/reset-password/{token}', [FrontendController::class, 'resetPassword'])->name('reset-password');
 
     Route::get('/verify/{token}', [StandartUserController::class, 'verify'])->name('verify');
     Route::post('/verify', [StandartUserController::class, 'resendVerify'])->name('post-unverified');
@@ -56,7 +58,7 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/forgot-password', [AdminUserController::class, 'forgotIndex'])->name('dashboard.forgot');
     Route::get('/reset-password/{token}', [AdminUserController::class, 'resetPasswordIndex'])->name('dashboard.reset-password');
     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/', [dashboardController::class, 'index'])->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/logout', [AdminUserController::class, 'logout'])->name('dashboard.logout');
         Route::prefix('users')->group(function () {
             Route::get('/', [AdminUserController::class, 'index'])->name('dashboard.users');
@@ -76,6 +78,21 @@ Route::prefix('dashboard')->group(function () {
             Route::post('/admin/edit', [AdminUserController::class, 'adminEdit'])->name('post-dashboard.user.edit.admin');
             Route::post('/admin/edit/password', [AdminUserController::class, 'adminEditPassword'])->name('post-dashboard.user.password.admin');
             Route::get('/admin/delete/{id}', [AdminUserController::class, 'adminDelete'])->name('get-dashboard.user.delete.admin');
+        });
+        Route::prefix('countries')->group(function () {
+            Route::get('/', [CountryController::class, 'index'])->name('dashboard.countries');
+            Route::get('/edit/{id}', [CountryController::class, 'editIndex'])->name('dashboard.countries.edit');
+
+            Route::post('/create', [CountryController::class, 'postCreate'])->name('post-dashboard.countries.create');
+            Route::post('/edit', [CountryController::class, 'postEdit'])->name('post-dashboard.countries.edit');
+            Route::get('/delete/{id}', [CountryController::class, 'delete'])->name('post-dashboard.countries.delete');
+        });
+        Route::prefix('cities')->group(function () {
+            Route::get('/{id}', [CityController::class, 'index'])->name('dashboard.cities');
+            Route::get('/edit/{id}', [CityController::class, 'editIndex'])->name('dashboard.cities.edit');
+            Route::post('/create', [CityController::class, 'postCreate'])->name('post-dashboard.cities.create');
+            Route::post('/edit', [CityController::class, 'postEdit'])->name('post-dashboard.cities.edit');
+            Route::get('/delete/{id}', [CityController::class, 'delete'])->name('dashboard.cities.delete');
         });
     });
 

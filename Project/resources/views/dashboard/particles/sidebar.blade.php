@@ -8,15 +8,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="chevron-right"></span>
+                <a class="nav-link  {{ request()->routeIs('dashboard.countries') ? 'active' : '' }}"" href="{{ route('dashboard.countries') }}">
+                    <span data-feather="flag"></span>
                     Countries
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="chevron-right"></span>
-                    Cities
                 </a>
             </li>
             <li class="nav-item  ">

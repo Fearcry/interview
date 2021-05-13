@@ -16,7 +16,7 @@
                         <div> {{ $message }}</div>
                     </div>
                 @enderror
-                <form action="{{ route('post-forgot-password') }}" method="POST">
+                <form id="forgorForm" action="{{ route('post-forgot-password') }}" method="POST">
                     @csrf
                     <div class="form-group p-1 m-1">
                         <label for="email">E-mail:</label>
@@ -36,5 +36,12 @@
             @endif
         </div>
     </div>
+    @push('scripts')
+        <script>
+            $('form#forgorForm').submit(function() {
+                $(this).find(':input[type=submit]').prop('disabled', true);
+            });
 
+        </script>
+    @endpush
 </div>

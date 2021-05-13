@@ -26,7 +26,7 @@
                     <div> {{ $message }}</div>
                 </div>
             @enderror
-            <form action="{{ route('post-dashboard.login') }}" method="POST">
+            <form id="loginForm" action="{{ route('post-dashboard.login') }}" method="POST">
                 @csrf
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -49,3 +49,11 @@
         @endif
     </main>
 @endsection
+@push('scripts')
+<script>
+    $('form#loginForm').submit(function() {
+        $(this).find(':input[type=submit]').prop('disabled', true);
+    });
+
+</script>
+@endpush

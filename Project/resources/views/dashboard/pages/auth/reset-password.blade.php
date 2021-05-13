@@ -16,7 +16,8 @@
                         <div class="alert alert-success p-2 mt-2 ">
                             <div><strong>Success</strong></div>
                             <div>{{ session()->get('success') }} </div>
-                            <div><a href="{{ route('dashboard.login') }}" role="button" class="btn btn-success">Sign In</a> </div>
+                            <div><a href="{{ route('dashboard.login') }}" role="button" class="btn btn-success">Sign
+                                    In</a> </div>
                         </div>
                     </div>
                 </div>
@@ -28,7 +29,7 @@
                         <div> {{ $message }}</div>
                     </div>
                 @enderror
-                <form action="{{ route('post-dashboard.reset-password') }}" method="POST">
+                <form id="resetForm" action="{{ route('post-dashboard.reset-password') }}" method="POST">
                     @csrf
                     <h1 class="h3 mb-3 fw-normal">Change Password</h1>
 
@@ -62,3 +63,11 @@
         @endif
     </main>
 @endsection
+@push('scripts')
+    <script>
+        $('form#resetForm').submit(function() {
+            $(this).find(':input[type=submit]').prop('disabled', true);
+        });
+
+    </script>
+@endpush

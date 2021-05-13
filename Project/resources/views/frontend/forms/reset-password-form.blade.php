@@ -24,7 +24,7 @@
                             <div> {{ $message }}</div>
                         </div>
                     @enderror
-                    <form action="{{ route('post-reset-password') }}" method="POST">
+                    <form id="resetPasswordForm" action="{{ route('post-reset-password') }}" method="POST">
                         @csrf
                         <div class="form-group p-1 m-1 d-flex flex-column">
 
@@ -55,5 +55,12 @@
             @endif
         </div>
     </div>
+    @push('scripts')
+        <script>
+            $('form#resetPasswordForm').submit(function() {
+                $(this).find(':input[type=submit]').prop('disabled', true);
+            });
 
+        </script>
+    @endpush
 </div>

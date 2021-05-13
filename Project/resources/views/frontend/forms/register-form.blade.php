@@ -16,7 +16,8 @@
                         <div> {{ $message }}</div>
                     </div>
                 @enderror
-                <form method="POST" action="{{ route('post-register') }}">
+                <form id="registerForm" method="POST" action="{{ route('post-register') }}"
+                    onsubmit="document.getElementById('submit').disabled=true;">
                     @csrf
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -30,7 +31,7 @@
                         <label for="name">E-mail</label>
                         <input type="email" name="email" class="form-control" placeholder="example@example.com"
                             value="{{ old('email') }}" required>
-                            @error('email')
+                        @error('email')
                             <div class="alert alert-danger p-2 mt-2 ">{{ $message }}</div>
                         @enderror
                     </div>
@@ -61,4 +62,12 @@
             @endif
         </div>
     </div>
+    @push('scripts')
+        <script>
+            $('form#registerForm').submit(function() {
+                $(this).find(':input[type=submit]').prop('disabled', true);
+            });
+
+        </script>
+    @endpush
 </div>

@@ -18,7 +18,7 @@
                     <div> {{ $message }}</div>
                 </div>
             @enderror
-            <form action="{{ route('post-dashboard.forgot') }}" method="POST">
+            <form id="forgotForm" action="{{ route('post-dashboard.forgot') }}" method="POST">
                 @csrf
                 <h1 class="h3 mb-3 fw-normal">Forgot Password</h1>
 
@@ -35,3 +35,11 @@
         @endif
     </main>
 @endsection
+@push('scripts')
+<script>
+    $('form#forgotForm').submit(function() {
+        $(this).find(':input[type=submit]').prop('disabled', true);
+    });
+
+</script>
+@endpush

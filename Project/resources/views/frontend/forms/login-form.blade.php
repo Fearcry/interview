@@ -10,11 +10,12 @@
                     <div>{{ session()->get('success') }} </div>
                 </div>
                 @push('scripts')
-                <script>
-                    setTimeout(function() {
-                        window.location = '{{ route('home') }}'
-                    }, 1500);
-                </script>
+                    <script>
+                        setTimeout(function() {
+                            window.location = '{{ route('home') }}'
+                        }, 1500);
+
+                    </script>
                 @endpush
             @else
                 @error('error')
@@ -24,7 +25,7 @@
                     </div>
                 @enderror
 
-                <form action="{{ route('post-login') }}" method="POST">
+                <form id="loginForm" action="{{ route('post-login') }}" method="POST">
                     @csrf
                     <div class="form-group p-1 m-1">
                         <label for="email">E-mail:</label>
@@ -52,4 +53,12 @@
             @endif
         </div>
     </div>
+    @push('scripts')
+        <script>
+            $('form#loginForm').submit(function() {
+                $(this).find(':input[type=submit]').prop('disabled', true);
+            });
+
+        </script>
+    @endpush
 </div>
