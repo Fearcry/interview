@@ -18,6 +18,10 @@ class AdminUserController extends Controller
     {
         return view('dashboard.pages.auth.login');
     }
+    public function forgotIndex()
+    {
+        return view('dashboard.pages.auth.forgot-password');
+    }
     public function standartCreateIndex()
     {
         return view('dashboard.pages.users.create', ['admin' => false]);
@@ -41,8 +45,6 @@ class AdminUserController extends Controller
         }
         return view('dashboard.pages.users.edit', ['admin' => true, 'user' => $user]);
     }
-
-
 
 
 
@@ -77,6 +79,26 @@ class AdminUserController extends Controller
         $adminServices->logout();
         return redirect()->route('dashboard.login');
     }
+    public function forgotPassword(Request $req, AdminUserServices $adminServices)
+    {
+        $validator = Validator::make($req->all(), [
+            'email' => 'required|string|email',
+        ]);
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput($req->all());
+        }
+
+        try {
+            $adminServices->forgotPassword($req);
+        } catch (\Exception $ex) {
+            return back()
+                ->withErrors(['error' => $ex->getMessage()])
+                ->withInput($req->all());
+        }
+    }
+
 
     public function adminCreate(Request $req, AdminUserServices $adminServices) // POST ADMIN USER CREATE
     {
