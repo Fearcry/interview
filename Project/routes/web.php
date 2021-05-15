@@ -24,13 +24,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['checkVerify'])->group(function () {
     Route::get('/', [FrontendController::class, 'index'])->name('home');
 });
+Route::middleware(['auth.standart'])->group(function () {
+    Route::get('/unverified', [FrontendController::class, 'unverified'])->name('unverified');
+    Route::get('/logout', [StandartUserController::class, 'logout'])->name('logout');
+});
 Route::get('/unverified', [FrontendController::class, 'unverified'])->name('unverified');
 Route::middleware(['auth.standart', 'checkVerify'])->group(function () {
     Route::get('/page/{page}', [FrontendController::class, 'index'])->name('home-task-paged');
     Route::get('/task/delete/{id}', [TaskController::class, 'delete'])->name('get-task-delete');
     Route::post('/password/change', [StandartUserController::class, 'changePassword'])->name('post-change-password');
     Route::post('/task', [TaskController::class, 'create'])->name('post-task');
-    Route::get('/logout', [StandartUserController::class, 'logout'])->name('logout');
+
 });
 Route::middleware(['auth.guest'])->group(function () {
     Route::get('/login', [FrontendController::class, 'login'])->name('login');
